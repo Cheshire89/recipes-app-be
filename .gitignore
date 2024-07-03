@@ -162,5 +162,5 @@ cython_debug/
 #.idea/
 
 # Misc
-./code_snippets.txt
+code_snippets.txt
 
