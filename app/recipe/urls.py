@@ -11,7 +11,7 @@ from rest_framework.routers import DefaultRouter
 from recipe import views
 
 router = DefaultRouter()
-router.register('recipes', viewset=views.RecipeViewSet)
+router.register('recepie', viewset=views.RecipeViewSet, basename='recepie')
 
 app_name = 'recipe'
 
