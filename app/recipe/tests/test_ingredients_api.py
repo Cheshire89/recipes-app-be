@@ -26,6 +26,11 @@ class PublicIngredientAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
 
+    def test_authentication_is_required(self):
+        """Test that authentication is required."""
+        res = self.client.get(INGREDIENT_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class PrivateIngredientAPITests(TestCase):
@@ -34,4 +39,10 @@ class PrivateIngredientAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = create_user()
-        self.client.force_authenticate()
+        self.client.force_authenticate(self.user)
+
+    def test_auth_user_can_make_request(self):
+        """Test that authenticated user get make the request."""
+        res = self.client.get(INGREDIENT_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)

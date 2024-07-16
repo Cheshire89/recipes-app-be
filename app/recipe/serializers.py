@@ -4,7 +4,8 @@ from rest_framework import serializers
 
 from core.models import (
     Recipe,
-    Tag
+    Tag,
+    Ingredient
 )
 
 
@@ -17,13 +18,31 @@ class TagSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
+class IngredientSerializer(serializers.ModelSerializer):
+    """Serializer for ingredients."""
+
+    class Meta:
+        model = Ingredient
+        fields = ['id', 'name']
+        read_only_fields = ['id']
+
+
 class RecipeSerializer(serializers.ModelSerializer):
     """Serializer for recipes."""
     tags = TagSerializer(many=True, required=False)
+    ingredients = IngredientSerializer(many=True, required=False)
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'prep_time', 'price', 'link', 'tags']
+        fields = [
+            'id',
+            'title',
+            'prep_time',
+            'price',
+            'link',
+            'tags',
+            'ingredients'
+        ]
         read_only_fields = ['id']
 
     def _get_or_create_tags(self, tags, recipe):
@@ -35,6 +54,16 @@ class RecipeSerializer(serializers.ModelSerializer):
                 **tag
             )
             recipe.tags.add(tag_obj)
+
+    def _get_or_create_ingredients(self, ingredients, recipe):
+        """Handel getting or creating ingredients as needed."""
+        auth_user = self.context['request'].user
+        for ingredient in ingredients:
+            ingredient_obj, created = Ingredient.objects.get_or_create(
+                user=auth_user,
+                **ingredient
+            )
+            recipe.ingredients.add(ingredient_obj)
 
     def create(self, validated_data):
         """Create a recipe."""
