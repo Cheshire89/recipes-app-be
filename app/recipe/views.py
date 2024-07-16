@@ -64,3 +64,7 @@ class IngredientViewSet(
     queryset = Ingredient.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Retrieve tags for authenticated user."""
+        return self.queryset.filter(user=self.request.user).order_by('-id')

@@ -7,6 +7,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from core.models import Ingredient
+from recipe.serializers import IngredientSerializer
+
 INGREDIENT_URL = reverse('recipe:ingredient-list')
 
 
@@ -43,6 +46,26 @@ class PrivateIngredientAPITests(TestCase):
 
     def test_auth_user_can_make_request(self):
         """Test that authenticated user get make the request."""
+        Ingredient.objects.create(user=self.user, name='Carnivore')
+        Ingredient.objects.create(user=self.user, name='Dessert')
+
+        res = self.client.get(INGREDIENT_URL)
+        tags = Ingredient.objects.all().order_by('-name')
+        serializer = IngredientSerializer(tags, many=True)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, serializer.data)
+
+    def test_ingredients_limited_to_user(self):
+        """Test list of ingredients is limited to authenticated user."""
+        user2 = create_user(email='user2@example.com', password='testingpass123')
+        Ingredient.objects.create(user=user2, name='Salt')
+        ingredient = Ingredient.objects.create(user=self.user, name='Pepper')
+
         res = self.client.get(INGREDIENT_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        self.assertEqual(res.data[0]['name'], ingredient.name)
+        self.assertEqual(res.data[0]['id'], ingredient.id)
+
