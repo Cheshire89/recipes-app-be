@@ -37,7 +37,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
-            'prep_time',
+            'prepTime',
             'price',
             'link',
             'tags',

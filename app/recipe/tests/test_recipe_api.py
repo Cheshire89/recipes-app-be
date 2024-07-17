@@ -34,7 +34,7 @@ def create_recipe(user, **params):
     defaults = {
         'title': 'Sample recipe title',
         'description': 'Sample description',
-        'prep_time': 30,
+        'prepTime': 30,
         'price': Decimal('5.25'),
         'link': 'http://example.com/recipe.pdf'
     }
@@ -119,7 +119,7 @@ class PrivateRecipeAPITests(TestCase):
         """Test creating a recipe."""
         payload = {
             'title': 'Sample Recipe',
-            'prep_time': 30,
+            'prepTime': 30,
             'price': Decimal('5.99')
         }
         res = self.client.post(RECIPES_URL, payload)
@@ -164,7 +164,7 @@ class PrivateRecipeAPITests(TestCase):
             'title': 'Updated title',
             'description': 'Updated description',
             'link': 'https://updated.com/recipe.pdf',
-            'prep_time': 10,
+            'prepTime': 10,
             'price': Decimal('5.99')
         }
 
@@ -220,7 +220,7 @@ class PrivateRecipeAPITests(TestCase):
         """Test creating a recpe with new tags"""
         payload = {
             'title': 'New recipe with tags',
-            'prep_time': 30,
+            'prepTime': 30,
             'price': Decimal('2.50'),
             'tags': [{'name': 'TestTag1'}, {'name': 'TestTag2'}]
         }
@@ -244,7 +244,7 @@ class PrivateRecipeAPITests(TestCase):
         tag_indian = Tag.objects.create(user=self.user, name='Indian')
         payload = {
             'title': 'Indian Dish',
-            'prep_time': 30,
+            'prepTime': 30,
             'price': Decimal('2.50'),
             'tags': [{'name': 'Indian'}, {'name': 'TestTag2'}]
         }
@@ -305,7 +305,7 @@ class PrivateRecipeAPITests(TestCase):
         """Test creating a recipe with new ingredients."""
         payload = {
             'title': 'Cauliflower Tacos',
-            'prep_time': 60,
+            'prepTime': 60,
             'price': Decimal('5.00'),
             'ingredients': [{'name': 'Cauliflower'}, {'name': 'Salt'}]
         }
@@ -329,7 +329,7 @@ class PrivateRecipeAPITests(TestCase):
         ingredient = Ingredient.objects.create(user=self.user, name='Salt')
         payload = {
             'title': 'Soup',
-            'prep_time': 25,
+            'prepTime': 25,
             'price': Decimal('2.55'),
             'ingredients': [{'name': 'Salt'}, {'name': 'Fish Sauce'}]
         }
