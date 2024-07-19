@@ -1,6 +1,6 @@
 version: "3.9"
 
-service:
+services:
   app:
     build:
       context: .
@@ -25,7 +25,7 @@ service:
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
-      - POSTGRES_USER=${DB_PASS}
+      - POSTGRES_PASSWORD=${DB_PASS}
 
   proxy:
     build:
